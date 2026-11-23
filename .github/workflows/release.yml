@@ -1,6 +1,6 @@
 name: Release
 
-# Publishing a tag like v0.2.0 (matching package.json "version") builds, tests,
+# Publishing a tag like v1.2.3 (matching package.json "version") builds, tests,
 # and publishes a GitHub Release with the built site attached.
 on:
   push:
@@ -62,7 +62,7 @@ jobs:
         run: |
           set -euo pipefail
           test -f dist/index.html || { echo "::error::dist/index.html missing"; exit 1; }
-          archive="qr-private-studio-${{ steps.version.outputs.version }}.zip"
+          archive="qr-code-generator-${{ steps.version.outputs.version }}.zip"
           (cd dist && zip -r "../$archive" .)
           ls -lh "$archive"
           echo "archive=$archive" >> "$GITHUB_OUTPUT"
@@ -75,5 +75,5 @@ jobs:
           set -euo pipefail
           gh release create "$GITHUB_REF_NAME" \
             "${{ steps.package.outputs.archive }}" \
-            --title "QR Private Studio ${{ steps.version.outputs.version }}" \
+            --title "QR Code Generator ${{ steps.version.outputs.version }}" \
             --generate-notes

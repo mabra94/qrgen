@@ -1,4 +1,4 @@
-# QR Private Studio
+# QR Code Generator
 
 [![CI](https://github.com/mabra94/qrgen/actions/workflows/ci.yml/badge.svg)](https://github.com/mabra94/qrgen/actions/workflows/ci.yml)
 
@@ -15,8 +15,16 @@ upload, and no telemetry, so the data you type never leaves your machine.
   level, margin, and transparent background.
 - **Center logo:** upload a PNG, JPEG, WebP, or SVG (max 2 MB). The file is read
   as a data URL in the browser and error correction is raised to `H` automatically.
-- **Export:** download the result as PNG (512–4000 px) or SVG.
-- **Live preview:** the QR code re-renders as you type.
+- **Resizable logo:** a slider steps through the distinct sizes the QR format can
+  actually draw. The cap is 50% of the error-correction recovery budget — a level
+  chosen by exporting every size and decoding it, so the largest logo offered is
+  one that still scans.
+- **Scannability guardrails:** an error is raised when the foreground/background
+  contrast falls below 4.5:1, and exporting is blocked until it is fixed.
+- **Export:** download the result as PNG (512–4000 px) or SVG, with the four-module
+  quiet zone the QR spec requires at every size.
+- **Live preview:** the QR code re-renders as you type. New renders are built
+  off-screen and swapped in atomically, so the preview never flashes or blanks.
 
 ## Privacy
 
@@ -76,8 +84,8 @@ Everything above also runs inside a prebuilt Playwright image, so no host Node
 install is needed:
 
 ```bash
-podman build -t qr-private-studio-test -f Containerfile.test .
-podman run --rm qr-private-studio-test
+podman build -t qr-code-generator-test -f Containerfile.test .
+podman run --rm qr-code-generator-test
 ```
 
 ### Continuous integration
@@ -89,28 +97,34 @@ On failure, the Playwright report and traces are uploaded as build artifacts.
 ### What the tests cover
 
 - **Unit:** payload output for URL/Wi-Fi/vCard/email/text, control-character
-  escaping, URL/email/phone validation, and logo type/size validation.
+  escaping, URL/email/phone validation, logo type/size validation, WCAG contrast
+  maths, the quiet zone, and the drawable logo sizes per error-correction level —
+  checked against widths measured from `qr-code-styling` itself.
 - **End-to-end:** rendering and switching content type, embedding an uploaded SVG
   logo as a `data:` URL with error correction set to `H`, removing the logo,
-  rejecting unsupported file types, and verifying QR/Wi-Fi content is never sent
-  over the network.
+  rejecting unsupported file types, stepping through every drawable logo size
+  without blanking the preview, PNG/SVG export, raising an error on low contrast,
+  and verifying QR/Wi-Fi content is never sent over the network.
+- **Scannability:** every drawable logo size at every error-correction level is
+  exported through the UI and decoded with jsQR, so a size that fails to scan
+  fails the build.
 
 ## Releasing
 
 Releases are driven by tags. The tag must match the `version` in
 `package.json` (the workflow fails otherwise, so the two can't drift).
 
-1. Set `"version"` in `package.json` (e.g. `0.3.0`) and commit it on `main`.
+1. Set `"version"` in `package.json` (e.g. `0.2.1`) and commit it on `main`.
 2. Tag and push:
 
    ```bash
-   git tag v0.3.0
-   git push origin v0.3.0
+   git tag v0.2.1
+   git push origin v0.2.1
    ```
 
 The [release workflow](./.github/workflows/release.yml) then re-runs the full
 test suite, builds `dist/`, and publishes a GitHub Release named after the tag
-with generated notes and `qr-private-studio-<version>.zip` attached. Unzip it and
+with generated notes and `qr-code-generator-<version>.zip` attached. Unzip it and
 serve the contents as a static site.
 
 ## Project structure
@@ -120,7 +134,9 @@ index.html               # Vite entry point
 src/
   main.ts                # UI wiring, QR rendering, PNG/SVG export
   payloads.ts            # QR payload builders, escaping, validation
-  logo.ts                # Logo type/size validation and data-URL reading
+  contrast.ts            # WCAG contrast ratio and the foreground/background check
+  logo.ts                # Logo type/size validation, safe sizing, data-URL reading
+  qr.ts                  # Quiet-zone maths (four modules at any render size)
   types.ts               # Shared State and ContentType types
   style.css              # App styles
 tests/

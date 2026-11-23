@@ -1,0 +1,6 @@
+export const MIN_CONTRAST_RATIO=4.5;
+export function parseHexColor(hex:string):[number,number,number]|null{const m=/^#?([0-9a-f]{3}|[0-9a-f]{6})$/i.exec(hex.trim());if(!m)return null;const h=m[1].length===3?m[1].replace(/./g,c=>c+c):m[1];return [parseInt(h.slice(0,2),16),parseInt(h.slice(2,4),16),parseInt(h.slice(4,6),16)];}
+function channelLuminance(value:number):number{const c=value/255;return c<=0.03928?c/12.92:((c+0.055)/1.055)**2.4;}
+export function relativeLuminance(hex:string):number|null{const rgb=parseHexColor(hex);if(!rgb)return null;const [r,g,b]=rgb.map(channelLuminance);return 0.2126*r+0.7152*g+0.0722*b;}
+export function contrastRatio(foreground:string,background:string):number|null{const a=relativeLuminance(foreground);const b=relativeLuminance(background);if(a===null||b===null)return null;const hi=Math.max(a,b);const lo=Math.min(a,b);return (hi+0.05)/(lo+0.05);}
+export function validateContrast(foreground:string,background:string):string|null{const ratio=contrastRatio(foreground,background);if(ratio===null||ratio>=MIN_CONTRAST_RATIO)return null;return `Contrast between foreground and background is too low (${ratio.toFixed(1)}:1). Use at least ${MIN_CONTRAST_RATIO}:1 so scanners can read the code.`;}

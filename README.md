@@ -1,5 +1,7 @@
 # QR Private Studio
 
+[![CI](https://github.com/mabra94/qrgen/actions/workflows/ci.yml/badge.svg)](https://github.com/mabra94/qrgen/actions/workflows/ci.yml)
+
 A browser-only QR code generator. Everything — content, styling, and the optional
 center logo — is generated locally in the browser. There is no backend, no
 upload, and no telemetry, so the data you type never leaves your machine.
@@ -78,6 +80,12 @@ podman build -t qr-private-studio-test -f Containerfile.test .
 podman run --rm qr-private-studio-test
 ```
 
+### Continuous integration
+
+GitHub Actions runs `npm run check` on every push to `main` and on every pull
+request targeting `main` (see [`.github/workflows/ci.yml`](./.github/workflows/ci.yml)).
+On failure, the Playwright report and traces are uploaded as build artifacts.
+
 ### What the tests cover
 
 - **Unit:** payload output for URL/Wi-Fi/vCard/email/text, control-character
@@ -102,6 +110,7 @@ tests/
   e2e/                   # Playwright specs and fixtures
 Containerfile.test       # Test/CI image
 compose.yaml             # Podman Compose dev service
+.github/workflows/ci.yml # GitHub Actions CI workflow
 ```
 
 ## License

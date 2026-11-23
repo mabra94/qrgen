@@ -95,6 +95,24 @@ On failure, the Playwright report and traces are uploaded as build artifacts.
   rejecting unsupported file types, and verifying QR/Wi-Fi content is never sent
   over the network.
 
+## Releasing
+
+Releases are driven by tags. The tag must match the `version` in
+`package.json` (the workflow fails otherwise, so the two can't drift).
+
+1. Set `"version"` in `package.json` (e.g. `0.3.0`) and commit it on `main`.
+2. Tag and push:
+
+   ```bash
+   git tag v0.3.0
+   git push origin v0.3.0
+   ```
+
+The [release workflow](./.github/workflows/release.yml) then re-runs the full
+test suite, builds `dist/`, and publishes a GitHub Release named after the tag
+with generated notes and `qr-private-studio-<version>.zip` attached. Unzip it and
+serve the contents as a static site.
+
 ## Project structure
 
 ```
@@ -111,6 +129,7 @@ tests/
 Containerfile.test       # Test/CI image
 compose.yaml             # Podman Compose dev service
 .github/workflows/ci.yml # GitHub Actions CI workflow
+.github/workflows/release.yml # Tag-driven release workflow
 ```
 
 ## License

@@ -1,0 +1,3 @@
+export type ContentType='url'|'text'|'wifi'|'vcard'|'email'|'sms'|'phone';
+export type DotType='square'|'dots'|'rounded'|'classy'|'classy-rounded'|'extra-rounded';
+export interface State {contentType:ContentType;url:string;text:string;ssid:string;wifiPassword:string;wifiAuth:'WPA'|'WEP'|'nopass';hidden:boolean;firstName:string;lastName:string;organization:string;title:string;phone:string;email:string;website:string;address:string;message:string;subject:string;foreground:string;background:string;dotType:DotType;errorCorrection:'L'|'M'|'Q'|'H';margin:number;size:number;transparent:boolean;logo?:string;logoName?:string;logoSize:number;logoMargin:number;}

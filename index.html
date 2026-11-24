@@ -1,1 +1,242 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Private browser-only QR generator"><title>QR Code Generator</title></head><body><div id="app"></div><script type="module" src="/src/main.ts"></script></body></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Free QR Code Generator — No Signup, No Tracking | qr.mbrk.eu</title>
+    <meta name="description" content="Create QR codes for URLs, Wi-Fi, vCards, email, SMS and phone numbers — with custom colours, module shapes and a centre logo. Runs entirely in your browser. Free, no signup, no tracking, and the codes never expire.">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+    <link rel="canonical" href="https://qr.mbrk.eu/">
+
+    <meta name="theme-color" content="#080d17">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="QR Code Generator">
+    <meta property="og:url" content="https://qr.mbrk.eu/">
+    <meta property="og:title" content="Free QR Code Generator — private by design">
+    <meta property="og:description" content="Browser-only QR generator. Your data never leaves your device. Free, no signup, no tracking, codes never expire.">
+    <meta property="og:locale" content="en">
+    <meta property="og:image" content="https://qr.mbrk.eu/og.png">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="A QR code with the letters QR in its centre">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Free QR Code Generator — private by design">
+    <meta name="twitter:description" content="Browser-only QR generator. Your data never leaves your device. Free, no signup, no tracking, codes never expire.">
+    <meta name="twitter:image" content="https://qr.mbrk.eu/og.png">
+    <meta name="twitter:image:alt" content="A QR code with the letters QR in its centre">
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "QR Code Generator",
+        "url": "https://qr.mbrk.eu/",
+        "image": "https://qr.mbrk.eu/og.png",
+        "applicationCategory": "UtilitiesApplication",
+        "operatingSystem": "Any (web browser)",
+        "browserRequirements": "Requires JavaScript",
+        "isAccessibleForFree": true,
+        "license": "https://opensource.org/licenses/MIT",
+        "codeRepository": "https://github.com/mabra94/qrgen",
+        "description": "Free, private, browser-only QR code generator for website URLs, plain text, Wi-Fi, vCard, email, SMS and phone numbers. All encoding happens on the user's device.",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "EUR"
+        },
+        "featureList": [
+          "No signup or account required",
+          "Runs entirely in the browser; data never leaves the device",
+          "Static QR codes that never expire and never redirect",
+          "Website URL, plain text, Wi-Fi, vCard, email, SMS and phone payloads",
+          "Custom foreground/background colours and module shapes",
+          "Optional centre logo with automatic error-correction",
+          "PNG (512-4000 px) and SVG export with a compliant four-module quiet zone"
+        ]
+      }
+    </script>
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Are these QR codes free and permanent?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. The generator is free and every code it produces is a standard static QR code. Static codes never expire, never redirect through a third party and never require a subscription."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Does the generator store or transmit my data?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. Everything is encoded in your browser. There is no backend, no upload and no analytics, so the URL, Wi-Fi password or contact details you enter never leave your device."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Can I add my own logo to the QR code?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. Upload a PNG, JPEG, WebP or SVG file up to 2 MB. Error correction is raised automatically and the logo size is capped at a value verified to still decode."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What export formats are supported?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "You can download the result as a PNG between 512 and 4000 pixels or as a vector SVG. Every export includes the four-module quiet zone the QR specification requires."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Can I generate a Wi-Fi QR code?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. Enter the network name (SSID), password and security type (WPA, WEP or none). Special characters are escaped so they cannot break the payload."
+            }
+          }
+        ]
+      }
+    </script>
+  </head>
+  <body>
+    <div id="app">
+      <header>
+        <b>QR Code Generator</b>
+        <span class="header-right">
+          <span class="local-only">&#9679; Local-only processing</span>
+          <a class="icon-link" href="https://github.com/mabra94/qrgen" target="_blank" rel="noopener noreferrer" aria-label="View the source code on GitHub" title="View the source code on GitHub">
+            <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
+          </a>
+        </span>
+      </header>
+
+      <main>
+        <section class="intro">
+          <small>PRIVATE BY DESIGN</small>
+          <h1>Create a QR code<br><em>without sharing your data.</em></h1>
+        </section>
+
+        <div class="workspace">
+          <aside>
+            <h2>1. Choose content</h2>
+            <div class="types">
+              <button type="button" data-type="url">Website</button>
+              <button type="button" data-type="text">Text</button>
+              <button type="button" data-type="wifi">Wi-Fi</button>
+              <button type="button" data-type="vcard">vCard</button>
+              <button type="button" data-type="email">Email</button>
+              <button type="button" data-type="sms">SMS</button>
+              <button type="button" data-type="phone">Phone</button>
+            </div>
+            <div data-panel="url">
+              <label><span>Website URL</span><input name="url" type="url"></label>
+            </div>
+            <div data-panel="text">
+              <label><span>Text</span><input name="text" type="text"></label>
+            </div>
+            <div data-panel="wifi">
+              <label><span>Network name (SSID)</span><input name="ssid" type="text"></label>
+              <label><span>Password</span><input name="wifiPassword" type="password"></label>
+              <label><span>Security</span><select name="wifiAuth"><option>WPA</option><option>WEP</option><option value="nopass">None</option></select></label>
+            </div>
+            <div data-panel="vcard">
+              <label><span>First name</span><input name="firstName" type="text"></label>
+              <label><span>Last name</span><input name="lastName" type="text"></label>
+              <label><span>Company</span><input name="organization" type="text"></label>
+              <label><span>Phone</span><input name="phone" type="text"></label>
+              <label><span>Email</span><input name="email" type="text"></label>
+            </div>
+            <div data-panel="email">
+              <label><span>Recipient</span><input name="email" type="email"></label>
+              <label><span>Subject</span><input name="subject" type="text"></label>
+              <label><span>Message</span><input name="message" type="text"></label>
+            </div>
+            <div data-panel="sms">
+              <label><span>Phone number</span><input name="phone" type="text"></label>
+              <label><span>Message</span><input name="message" type="text"></label>
+            </div>
+            <div data-panel="phone">
+              <label><span>Phone number</span><input name="phone" type="text"></label>
+            </div>
+
+            <h2>2. Design</h2>
+            <div class="row">
+              <label><span>Foreground</span><input name="foreground" type="color"></label>
+              <label><span>Background</span><input name="background" type="color"></label>
+            </div>
+            <label><span>Module shape</span><select name="dotType"><option>square</option><option>rounded</option><option>dots</option><option>classy</option><option>classy-rounded</option><option>extra-rounded</option></select></label>
+            <label><span>Error correction</span><select name="errorCorrection"><option>L</option><option>M</option><option>Q</option><option>H</option></select></label>
+            <label class="upload"><span>Center logo</span><input id="logo" type="file" accept="image/png,image/jpeg,image/webp,image/svg+xml"><small>Processed locally, max. 2 MB</small></label>
+            <div id="logoSizeField" hidden>
+              <label><span>Logo size</span><input id="logoSize" type="range" min="0" max="0" step="1" value="0"></label>
+              <small id="logoSizeHint"></small>
+            </div>
+            <div id="logoStatus" aria-live="polite"></div>
+            <button id="removeLogo" type="button">Remove logo</button>
+          </aside>
+
+          <section class="preview">
+            <div>
+              <small>LIVE PREVIEW</small>
+              <h2 id="status">Generated locally</h2>
+            </div>
+            <div id="qr"></div>
+            <div id="errors" role="alert"></div>
+            <div class="actions">
+              <label><span>Export size</span><select name="size"><option>512</option><option selected>1000</option><option>2000</option><option>4000</option></select></label>
+              <button id="png">Download PNG</button>
+              <button id="svg">Download SVG</button>
+            </div>
+          </section>
+        </div>
+      </main>
+
+      <footer class="site-footer">
+        <section>
+          <h2>About this QR code generator</h2>
+          <p>This is a free, open-source QR code generator that runs entirely in your browser. There is no account, no upload and no tracking: the text you type is encoded on your device, so your URLs, Wi-Fi credentials and contact details never leave your machine. Unlike many online generators, the codes are plain static QR codes — they do not expire, redirect or route through a third-party service.</p>
+          <p>Supported content types include website URLs, plain text, Wi-Fi network access, vCards, email, SMS and phone numbers. You can customise the foreground and background colours, change the module shape, raise the error-correction level, add a centre logo, and export a high-resolution PNG or a vector SVG — each with the quiet zone the QR specification requires.</p>
+        </section>
+
+        <section>
+          <h2>Frequently asked questions</h2>
+          <details>
+            <summary>Are these QR codes free and permanent?</summary>
+            <p>Yes. The generator is free and every code it produces is a standard static QR code. Static codes never expire, never redirect through a third party and never require a subscription.</p>
+          </details>
+          <details>
+            <summary>Does the generator store or transmit my data?</summary>
+            <p>No. Everything is encoded in your browser. There is no backend, no upload and no analytics, so the URL, Wi-Fi password or contact details you enter never leave your device.</p>
+          </details>
+          <details>
+            <summary>Can I add my own logo to the QR code?</summary>
+            <p>Yes. Upload a PNG, JPEG, WebP or SVG file up to 2 MB. Error correction is raised automatically and the logo size is capped at a value verified to still decode.</p>
+          </details>
+          <details>
+            <summary>What export formats are supported?</summary>
+            <p>You can download the result as a PNG between 512 and 4000 pixels or as a vector SVG. Every export includes the four-module quiet zone the QR specification requires.</p>
+          </details>
+          <details>
+            <summary>Can I generate a Wi-Fi QR code?</summary>
+            <p>Yes. Enter the network name (SSID), password and security type (WPA, WEP or none). Special characters are escaped so they cannot break the payload.</p>
+          </details>
+        </section>
+
+        <p class="footer-meta"><a href="https://github.com/mabra94/qrgen" target="_blank" rel="noopener noreferrer">Source on GitHub</a> &middot; MIT licensed &middot; Hosted in Europe</p>
+      </footer>
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

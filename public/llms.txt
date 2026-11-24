@@ -1,0 +1,31 @@
+# QR Code Generator
+
+> A free, private, browser-only QR code generator. All encoding happens on the
+> user's device: no account, no upload, no tracking and no backend. The codes it
+> produces are standard static QR codes that never expire and never redirect.
+
+## What it does
+
+- Content types: website URL, plain text, Wi-Fi (SSID, password, security type),
+  vCard, email, SMS and phone number.
+- Design: foreground/background colours, module shape, error-correction level,
+  quiet-zone margin, transparent background and an optional centre logo
+  (PNG, JPEG, WebP or SVG, up to 2 MB).
+- Guardrails: refuses to export when foreground/background contrast falls below
+  WCAG 4.5:1, and caps the centre logo at a size verified to still decode.
+- Export: PNG (512–4000 px) and SVG, each including the four-module quiet zone
+  the QR specification requires.
+
+## Canonical facts
+
+- Free: yes, with no paid tier.
+- Sign-up: none required.
+- Tracking or analytics: none.
+- Data handling: entirely client-side; the content is never transmitted.
+- Code lifetime: static and permanent — no expiry, no redirects, no subscription.
+- Open source: MIT licensed.
+
+## Links
+
+- App: https://qr.mbrk.eu/
+- Source code: https://github.com/mabra94/qrgen

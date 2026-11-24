@@ -1,0 +1,25 @@
+# https://qr.mbrk.eu/robots.txt
+
+User-agent: *
+Allow: /
+
+# Answer-engine and AI crawlers are explicitly welcome.
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+Sitemap: https://qr.mbrk.eu/sitemap.xml
